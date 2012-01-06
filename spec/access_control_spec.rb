@@ -1,18 +1,6 @@
 require 'spec_helper'
 
 module Allowy
-  class SampleAccess
-    include AccessControl
-
-    def read?(str)
-      str == 'allow'
-    end
-
-    def context_is_123?(*whatever)
-      context === 123
-    end
-  end
-
   describe "checking permissions" do
 
     let(:access)  { SampleAccess.new(123) }
