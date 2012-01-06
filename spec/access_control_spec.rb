@@ -30,8 +30,13 @@ module Allowy
 
     describe "#authorize!" do
       it "shuold raise error" do
-        expect { subject.authorize! :read, 'deny' }.to raise_error AccessDenied
+        expect { subject.authorize! :read, 'deny' }.to raise_error AccessDenied do |err|
+          err.message.should_not be_blank
+          err.action.should == :read
+          err.subject.should == 'deny'
+        end
       end
+
       it "should not raise error" do
         expect { subject.authorize! :read, 'allow' }.not_to raise_error AccessDenied
       end

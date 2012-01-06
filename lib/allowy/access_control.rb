@@ -21,7 +21,7 @@ module Allowy
       end
 
       def authorize!(*args)
-        raise AccessDenied unless can?(*args)
+        raise AccessDenied.new("Not authorized", args.first, args[1]) unless can?(*args)
       end
     end
 

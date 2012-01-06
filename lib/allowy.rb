@@ -5,7 +5,16 @@ require "allowy/registry"
 require "allowy/controller_extensions"
 
 module Allowy
-  class UndefinedActionError < StandardError; end
   class UndefinedAccessControlError < StandardError; end
-  class AccessDenied < StandardError; end
+  class UndefinedActionError < StandardError; end
+
+  class AccessDenied < StandardError
+    attr_reader :action, :subject
+
+    def initialize(message, action, subject)
+      @message = message
+      @action = action
+      @subject = subject
+    end
+  end
 end
