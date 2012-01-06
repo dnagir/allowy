@@ -5,8 +5,12 @@ module Allowy
 
     module InstanceMethods
 
+      def allowy_context
+        self
+      end
+
       def current_allowy
-        @current_allowy ||= ::Allowy::Registry.new(self)
+        @current_allowy ||= ::Allowy::Registry.new(allowy_context)
       end
 
       def can?(action, subject, *args)
@@ -23,11 +27,6 @@ module Allowy
     end
 
   end
-
-  module ClassMethods
-
-  end
-
 end
 
 if defined? ActionController
