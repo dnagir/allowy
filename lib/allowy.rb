@@ -5,4 +5,5 @@ require "allowy/controller_extensions"
 
 module Allowy
   class UndefinedActionError < StandardError; end
+  class UnauthorizedError < StandardError; end
 end
