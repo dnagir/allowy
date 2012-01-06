@@ -21,7 +21,7 @@ module Allowy
       end
 
       def authorize!(*args)
-        raise UnauthorizedError unless can?(*args)
+        raise AccessDenied unless can?(*args)
       end
     end
 
