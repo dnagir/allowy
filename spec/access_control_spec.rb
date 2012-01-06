@@ -1,19 +1,11 @@
 require 'spec_helper'
 
 module Allowy
-
-  class Page
-    attr_accessor :name
-    def initialize(name)
-      @name = name
-    end
-  end
-
-  class PageAccess
+  class SampleAccess
     include AccessControl
 
-    def read?(page)
-      page.name == 'allow'
+    def read?(str)
+      str == 'allow'
     end
 
     def context_is_123?(*whatever)
@@ -23,11 +15,7 @@ module Allowy
 
   describe "checking permissions" do
 
-    def page_for(name)
-      Page.new(name)
-    end
-
-    let(:access)  { PageAccess.new(123) }
+    let(:access)  { SampleAccess.new(123) }
     subject       { access }
 
     describe "#context as an arbitrary object" do
@@ -40,15 +28,15 @@ module Allowy
     end
 
     it "should allow" do
-      subject.should be_able_to :read, page_for('allow')
+      subject.should be_able_to :read, 'allow'
     end
 
     it "should deny" do
-      subject.should_not be_able_to :read, page_for('deny')
+      subject.should_not be_able_to :read, 'deny'
     end
 
     it "should raise if no permission defined" do
-      expect { subject.can? :write, page_for('allow') }.to raise_error UndefinedActionError
+      expect { subject.can? :write, 'allow' }.to raise_error UndefinedActionError
     end
 
 
