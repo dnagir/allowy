@@ -3,47 +3,57 @@ require 'active_support/concern'
 
 module Allowy
 
-  class AbleToMatcher
-    def initialize(action, subject)
-      @action, @subject = action, subject
-    end
+  module Matchers
 
-    def say msg
-      "#{msg} #{@action} #{@subject.inspect}" + if @context && @context.any?
-        @context.inspect
-      else
-        ''
+    class AbleToMatcher
+      def initialize(action, subject)
+        @action, @subject = action, subject
+      end
+
+      def say msg
+        "#{msg} #{@action} #{@subject.inspect}" + if @context && @context.any?
+          ' ' + @context.inspect
+        else
+          ''
+        end
+      end
+
+      def matches?(access_control)
+        @context = access_control.context
+        access_control.can?(@action, @subject)
+      end
+
+      def description
+        say "be able to"
+      end
+
+      def failure_message
+        say "expected to be able to"
+      end
+
+      def negative_failure_message
+        say "expected NOT to be able to"
       end
     end
 
-    def ==(access_control)
-      @context = access_control.context
-      access_control.can?(@action, @subject)
+    ::RSpec::Matchers.define :be_able_to do |*args|
+      m = AbleToMatcher.new(*args)
+      match                           {|a| m.matches?(a) }
+      failure_message_for_should      { m.failure_message }
+      failure_message_for_should_not  { m.negative_failure_message }
+      description                     { m.description }
     end
 
-    def description
-      say "be able to"
-    end
-
-    def failure_message_for_should
-      say "expected to be able to"
-    end
-
-    def failure_message_for_should_not
-      say "expected NOT to be able to"
-    end
-
-  end
-  module ::Kernel
-    def able_to?(action, subject)
-      AbleToMatcher.new(action, subject)
-    end
   end
 
   module AccessControl
     extend ActiveSupport::Concern
+    included do
+      attr_accessor :context
+    end
 
     module ClassMethods
+
       def context(*accessors)
         accessors.each do |m|
           attr_accessor m
@@ -57,17 +67,19 @@ module Allowy
       end
 
       def prepare_context(context={})
+        @context = context
         context.each_pair do |k,v|
           self.send("#{k}=", v)
         end
         self
       end
 
-      def can?(action, subject, *args)
+      def can?(action, subject)
+        send(action, subject)
       end
 
-      def cannot?(action, subject, *args)
-        !can?(action, subject, *args)
+      def cannot?(action, subject)
+        !can?(action, subject)
       end
 
     end
