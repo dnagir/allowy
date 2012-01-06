@@ -1,6 +1,7 @@
 require 'active_support/concern'
 require "allowy/version"
 require "allowy/access_control"
+require "allowy/registry"
 require "allowy/controller_extensions"
 
 module Allowy
