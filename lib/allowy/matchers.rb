@@ -2,7 +2,7 @@ module Allowy
   module Matchers
 
     class AbleToMatcher
-      def initialize(action, subject)
+      def initialize(action, subject=nil)
         @action, @subject = action, subject
       end
 

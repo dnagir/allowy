@@ -1,6 +1,4 @@
-require 'pry'
-require 'allowy'
-require 'allowy/matchers'
+require 'spec_helper'
 
 module Allowy
 
@@ -13,10 +11,13 @@ module Allowy
 
   class PageAccess
     include AccessControl
-    context :current_user, :whatever
 
     def read?(page)
       page.name == 'allow'
+    end
+
+    def context_is_123?(*whatever)
+      context === 123
     end
   end
 
@@ -26,10 +27,17 @@ module Allowy
       Page.new(name)
     end
 
-    subject { PageAccess.new(:current_user => 123, :whatever => 456) }
+    let(:access)  { PageAccess.new(123) }
+    subject       { access }
 
-    its(:current_user)  { should == 123 }
-    its(:whatever)      { should == 456 }
+    describe "#context as an arbitrary object" do
+      subject     { access.context }
+      its(:to_s)  { should == '123' }
+      its(:zero?) { should be_false }
+      it "should be able to access the context" do
+        access.should be_able_to :context_is_123
+      end
+    end
 
     it "should allow" do
       subject.should be_able_to :read, page_for('allow')
@@ -39,9 +47,14 @@ module Allowy
       subject.should_not be_able_to :read, page_for('deny')
     end
 
-
     it "should raise if no permission defined" do
       expect { subject.can? :write, page_for('allow') }.to raise_error UndefinedActionError
+    end
+
+
+    describe "#authorize!" do
+      it "shuold raise error"
+      it "should not raise error"
     end
 
   end
