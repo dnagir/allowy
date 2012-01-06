@@ -23,6 +23,12 @@ module Allowy
         expect { subject.access_control_for!(nil) }.to raise_error UndefinedAccessControlError 
       end
 
+      it "should return the same AC instance" do
+        first = subject.access_control_for!(Sample)
+        secnd = subject.access_control_for!(Sample)
+        first.should === secnd
+      end
+
     end
   end
 end

@@ -2,6 +2,7 @@ module Allowy
   class Registry
     def initialize(ctx)
       @context = ctx
+      @registry = {}
     end
 
     def access_control_for!(subject)
@@ -20,7 +21,7 @@ module Allowy
 
       return unless clazz # No luck this time
       # create a new instance or return existing
-      clazz.new(@context)
+      @registry[clazz] ||= clazz.new(@context)
     end
 
     def class_for(name)
