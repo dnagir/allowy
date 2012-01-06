@@ -46,6 +46,8 @@ module Allowy
 
   end
 
+  class UndefinedActionError < StandardError; end
+
   module AccessControl
     extend ActiveSupport::Concern
     included do
@@ -75,6 +77,7 @@ module Allowy
       end
 
       def can?(action, subject)
+        raise UndefinedActionError.new unless self.respond_to? action
         send(action, subject)
       end
 
@@ -100,6 +103,14 @@ module Allowy
     def read(page)
       page.name == 'allow'
     end
+
+    def read_for_all(clazz)
+      true
+    end
+
+    def read_private(clazz)
+      false
+    end
   end
 
   describe "checking permissions" do
@@ -123,7 +134,7 @@ module Allowy
 
 
     it "should raise if no permission defined" do
-      expect { subject.can? :write, page_for('allow') }.to raise_error UndefinedPermission
+      expect { subject.can? :write, page_for('allow') }.to raise_error UndefinedActionError
     end
 
     it "should allow on class" do
