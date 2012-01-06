@@ -31,13 +31,14 @@ module Allowy
         self
       end
 
-      def can?(action, subject)
-        raise UndefinedActionError.new unless self.respond_to? action
-        send(action, subject)
+      def can?(action, *args)
+        m = "#{action}?"
+        raise UndefinedActionError.new unless self.respond_to? m
+        send(m, *args)
       end
 
-      def cannot?(action, subject)
-        !can?(action, subject)
+      def cannot?(*args)
+        not can?(*args)
       end
 
     end

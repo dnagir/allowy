@@ -15,16 +15,8 @@ module Allowy
     include AccessControl
     context :current_user, :whatever
 
-    def read(page)
+    def read?(page)
       page.name == 'allow'
-    end
-
-    def read_for_all(clazz)
-      true
-    end
-
-    def read_private(clazz)
-      false
     end
   end
 
@@ -50,14 +42,6 @@ module Allowy
 
     it "should raise if no permission defined" do
       expect { subject.can? :write, page_for('allow') }.to raise_error UndefinedActionError
-    end
-
-    it "should allow on class" do
-      subject.should be_able_to :read_for_all, Page
-    end
-
-    it "should not allow on class" do
-      subject.should_not be_able_to :read_private, Page
     end
 
   end
