@@ -7,8 +7,8 @@ module Allowy
       end
 
       def say msg
-        "#{msg} #{@action} #{@subject.inspect}" + if @context && @context.any?
-          ' ' + @context.inspect
+        "#{msg} #{@action} #{@subject.inspect}" + if @context
+          ' with ' + @context.inspect
         else
           ''
         end

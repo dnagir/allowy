@@ -12,7 +12,7 @@ module Allowy
 
       def can?(action, *args)
         m = "#{action}?"
-        raise UndefinedActionError.new unless self.respond_to? m
+        raise UndefinedAction.new("The #{self.class.name} needs to have #{m} method. Please define it.") unless self.respond_to? m
         send(m, *args)
       end
 

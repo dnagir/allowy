@@ -5,8 +5,8 @@ require "allowy/registry"
 require "allowy/controller_extensions"
 
 module Allowy
-  class UndefinedAccessControlError < StandardError; end
-  class UndefinedActionError < StandardError; end
+  class UndefinedAccessControl < StandardError; end
+  class UndefinedAction < StandardError; end
 
   class AccessDenied < StandardError
     attr_reader :action, :subject

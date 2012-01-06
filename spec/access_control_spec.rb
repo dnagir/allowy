@@ -24,7 +24,9 @@ module Allowy
     end
 
     it "should raise if no permission defined" do
-      expect { subject.can? :write, 'allow' }.to raise_error UndefinedActionError
+      lambda { subject.can? :write, 'allow' }.should raise_error(UndefinedAction) {|err|
+        err.message.should include 'write?'
+      }
     end
 
 

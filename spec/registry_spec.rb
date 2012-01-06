@@ -16,11 +16,13 @@ module Allowy
       end
 
       it "should raise when AC is not found by the subject" do
-        expect { subject.access_control_for!(123) }.to raise_error UndefinedAccessControlError 
+        lambda { subject.access_control_for!(123) }.should raise_error(UndefinedAccessControl) {|err|
+          err.message.should include '123'
+        }
       end
 
       it "should raise when subject is nil" do
-        expect { subject.access_control_for!(nil) }.to raise_error UndefinedAccessControlError 
+        lambda { subject.access_control_for!(nil) }.should raise_error UndefinedAccessControl
       end
 
       it "should return the same AC instance" do

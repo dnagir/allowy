@@ -7,7 +7,7 @@ module Allowy
 
     def access_control_for!(subject)
       ac = access_control_for subject
-      raise UndefinedAccessControlError unless ac
+      raise UndefinedAccessControl.new("Please define Access Control class for #{subject.inspect}") unless ac
       ac
     end
 
