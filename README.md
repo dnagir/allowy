@@ -88,11 +88,10 @@ end
 If you want to change the context in Rails then just override it on a single controller or globally on the `ApplicationController`:
 
 ```ruby
-class DefaultAccess
-  include Allowy::AccessControl
-  # This will give you methods without the need to go to context object
-  delegate :current_user,    :to => :context
-  delegate :current_company, :to => :context
+class PagesController < ApplicationController
+  def allowy_context
+    {realy: 'anything, can_be: 'here', event: params}
+  end
 end
 ```
 
@@ -104,6 +103,8 @@ I recommend creating your own base class to provide common context and maybe som
 ```ruby
 class DefaultAccess
   include Allowy::AccessControl
+  delegate :current_user,    :to => :context
+  delegate :current_company, :to => :context
 end
 ```
 
