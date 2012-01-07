@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Dmytrii Nagirniak"]
   s.email       = ["dnagir@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Authorization with simplicity and explicitness in mind}
+  s.description = %q{Allowy provides CanCan-like way of checking permission but doesn't enforce a tight DSL giving you more control}
 
   s.rubyforge_project = "allowy"
 
