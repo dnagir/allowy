@@ -26,7 +26,7 @@ module Allowy
 
     def class_for(name)
       # TODO: Namespace it
-      return ::Kernel.const_get(name) if ::Kernel.const_defined?(name)
+      return ::Object.const_get(name) if ::Object.const_defined?(name)
     end
 
   end
