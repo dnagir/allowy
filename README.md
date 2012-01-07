@@ -136,6 +136,33 @@ class PageAccess < DefaultAccess
 end
 ```
 
+In your controller:
+
+```ruby
+class PagesController < ApplicationController
+  def show
+    @page = Page.find(params[:id])
+    authorize! :view, @page # It will raise if declined
+    # can?, cannot? can be used too
+  end
+
+  # Add this to the ApplicationController to handle it globally
+  rescue_from Allowy::AccessDenied do |exception|
+    logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
+    redirect_to new_user_session_url, :alert => exception.message
+  end
+end
+```
+
+In your views:
+
+```haml
+# app/views/pages/show.html.haml
+
+%h1= @page.name
+= link_to "Edit', edit_page_path if can? :edit, @page
+```
+
 
 # Testing with RSpec
 
