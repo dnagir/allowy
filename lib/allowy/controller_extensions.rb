@@ -2,6 +2,9 @@ module Allowy
 
   module ControllerExtensions
     extend ActiveSupport::Concern
+    included do
+      helper_method :can?, :cannot?
+    end
 
     module InstanceMethods
 
