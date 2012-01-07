@@ -90,7 +90,7 @@ If you want to change the context in Rails then just override it on a single con
 ```ruby
 class PagesController < ApplicationController
   def allowy_context
-    {realy: 'anything, can_be: 'here', event: params}
+    {realy: 'anything', can_be: 'here', event: params}
   end
 end
 ```
