@@ -1,4 +1,6 @@
 require 'active_support/concern'
+require 'active_support/inflector'
+
 require "allowy/version"
 require "allowy/access_control"
 require "allowy/registry"

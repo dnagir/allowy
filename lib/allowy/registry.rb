@@ -25,8 +25,7 @@ module Allowy
     end
 
     def class_for(name)
-      # TODO: Namespace it
-      return ::Object.const_get(name) if ::Object.const_defined?(name)
+      name.constantize rescue nil #TODO: Handle just the NameError
     end
 
   end
