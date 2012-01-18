@@ -31,7 +31,7 @@ So I decided to put up allowy to solve those issue for me.
 Add it to your Rails application's `Gemfile`:
 
 ```ruby
-gem 'alowy'
+gem 'allowy'
 ```
 
 Then `bundle install`.
