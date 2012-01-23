@@ -7,15 +7,10 @@ module Allowy
       end
 
       def say msg
-        "#{msg} #{@action} #{@subject.inspect}" + if @context
-          ' with ' + @context.inspect
-        else
-          ''
-        end
+        "#{msg} #{@action} #{@subject.inspect}"
       end
 
       def matches?(access_control)
-        @context = access_control.context
         access_control.can?(@action, @subject)
       end
 
