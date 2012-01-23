@@ -93,7 +93,7 @@ If you want to change the context in Rails then just override it in the controll
 ```ruby
 class PagesController < ApplicationController
   def allowy_context
-    {realy: 'anything', can_be: 'here', event: params}
+    {realy: 'anything', can_be: 'here', even: params}
   end
 end
 ```
@@ -217,7 +217,27 @@ describe PagesController do
     post(:create).should be_success
   end
 end
+
 ```
+
+But if you don't want to stub the context because you access its `can?`, `cannot?` or `authorize!` methods
+(allwing permission delegation) then you can simply mix the `Allowy::Context` in:
+
+```ruby
+class ControllerLikeContext
+  include Alllowy::Context
+  attr_accessor :current_user
+
+  def initialize(user)
+    @current_user = user
+  end
+end
+
+# Then you can simply instantiate it to check the permissions:
+ControllerLikeContext.new(that_user).should be_able_to :edit, Blog
+ControllerLikeContext.new(this_user).should_not be_able_to :edit, Blog
+```
+
 
 # Development
 
