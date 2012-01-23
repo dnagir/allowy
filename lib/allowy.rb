@@ -4,6 +4,7 @@ require 'active_support/inflector'
 require "allowy/version"
 require "allowy/access_control"
 require "allowy/registry"
+require "allowy/context"
 require "allowy/controller_extensions"
 
 module Allowy
