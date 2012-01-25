@@ -21,27 +21,25 @@ module Allowy
   module Context
     extend ActiveSupport::Concern
 
-    module InstanceMethods
 
-      def allowy_context
-        self
-      end
+    def allowy_context
+      self
+    end
 
-      def current_allowy
-        @current_allowy ||= ::Allowy::Registry.new(allowy_context)
-      end
+    def current_allowy
+      @current_allowy ||= ::Allowy::Registry.new(allowy_context)
+    end
 
-      def can?(action, subject, *args)
-        current_allowy.access_control_for!(subject).can?(action, subject, *args)
-      end
+    def can?(action, subject, *args)
+      current_allowy.access_control_for!(subject).can?(action, subject, *args)
+    end
 
-      def cannot?(*args)
-        current_allowy.access_control_for!(subject).cannot?(action, subject, *args)
-      end
+    def cannot?(*args)
+      current_allowy.access_control_for!(subject).cannot?(action, subject, *args)
+    end
 
-      def authorize!(action, subject, *args)
-        current_allowy.access_control_for!(subject).authorize!(action, subject, *args)
-      end
+    def authorize!(action, subject, *args)
+      current_allowy.access_control_for!(subject).authorize!(action, subject, *args)
     end
   end
 
