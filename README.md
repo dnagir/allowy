@@ -41,7 +41,7 @@ Or use `allowy` gem any other way you are not in Rails.
 # Usage
 
 I will be assuming a CMS-like system in the examples below.
-The `Page` class may be ActiveRecord, Mongoid or any other model of your choise. Doesn't matter.
+The `Page` class may be ActiveRecord, Mongoid or any other model of your choice. Doesn't matter.
 
 
 ## Minimal setup
