@@ -27,13 +27,12 @@ module Allowy
       end
     end
 
-    ::RSpec::Matchers.define :be_able_to do |*args|
-      m = AbleToMatcher.new(*args)
-      match                           {|a| m.matches?(a) }
-      failure_message_for_should      { m.failure_message }
-      failure_message_for_should_not  { m.negative_failure_message }
-      description                     { m.description }
+    def be_able_to(*args)
+      AbleToMatcher.new(*args)
     end
-
   end
+end
+
+module RSpec::Matchers
+  include Allowy::Matchers
 end
