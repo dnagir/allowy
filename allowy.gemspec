@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Allowy::VERSION
   s.authors     = ["Dmytrii Nagirniak"]
   s.email       = ["dnagir@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/dnagir/allowy"
   s.summary     = %q{Authorization with simplicity and explicitness in mind}
   s.description = %q{Allowy provides CanCan-like way of checking permission but doesn't enforce a tight DSL giving you more control}
 
