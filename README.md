@@ -216,6 +216,11 @@ describe PagesController do
   it "will always allow no matter what" do
     post(:create).should be_success
   end
+
+  it "checks the authorisation" do
+    should_authorize_for(:create, page)
+    post(:create)
+  end
 end
 
 ```
