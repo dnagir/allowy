@@ -14,10 +14,10 @@ CanCan doesn't work very well for me when Ability definitions grow above 20 line
 
 - it becomes **really hard to track down** why something was (or not) allowed.
 - **DSL enforces** you to use ActiveRecord-like scopes or blocks. It gets harder to maintain.
-- The Ability class contains **all the definitions for everything**. Hard to test, hard to maintain unless carefully refactor it.
-- Implicit permission - CanCan tries to be very smart (and is indeed) using aliases such as `:manage` but it makes even harder to maintain.
+- The Ability class contains **all the definitions for everything**. Hard to test, hard to maintain unless you carefully refactor it.
+- Implicit permission - CanCan tries to be very smart (and is indeed) using aliases such as `:manage` but it makes even harder to understand it.
 - Implicit permission - you can use any symbol to check permissions. `:love_people` will do, even if you never defined it.
-- A little bit **tight to ORM**. When using with database such as neo4j, some smalish things don't work. So I prefer to be explicit.
+- A little bit **tight to ORM**. When using with database such as neo4j, some small-ish things don't work. So I prefer to be explicit.
 - **Testing** an ability for a single class often depends on too many others.
 - **Refacoring** of the abilities feels like rolling your own authorization library.
 
@@ -36,7 +36,7 @@ gem 'allowy'
 
 Then `bundle install`.
 
-Or use `allowy` gem any other way you are not in Rails.
+Or use `allowy` gem as usually.
 
 # Usage
 
@@ -53,7 +53,7 @@ If you want to safeguard `Page` class then define `PageAccess` class:
 class PageAccess
   include Allowy::AccessControl
 
-  # This will allow you to ask: can? :view, page
+  # This will allow you to ask: `can? :view, page`
   # The truthy result of this function will grant access, otherwise not.
   def view?(page)
     page and page.published?
@@ -64,11 +64,11 @@ class PageAccess
   end
 end
 
-# Then, in rails, you would use it:
+# Then, in rails controller/view, you would use it:
 can? :view, page
 cannot? :edit, page
 authorize! :view, page # raises Allowy::AccessDenied if can?(:view, page) returns false
-can? :love_people, page # Will raise error because `love_people` is not defined on the Access Control class
+can? :love_people, page # Will raise NoMethodError because `love_people` is not defined on the Access Control class
 ```
 
 ## Context
@@ -82,18 +82,23 @@ class PageAccess
   include Allowy::AccessControl
 
   def view?(page)
-    return true if context.params[:hiddedn_hack_for_admin]
+    return true if context.params[:hidden_hack_for_admin]
     context.user_signed_in? and page.published?
   end
 end
 ```
 
-If you want to change the context in Rails then just override it in the controller or globally in the `ApplicationController`:
+If you want to change the context in Rails then just override it in the controller or globally in the `ApplicationController`.
+The only requirement for the context is that it should mix-in the `Allowy::Context` module.
 
 ```ruby
+class CmsContext < Hash
+  include Allowy::Context
+end
+
 class PagesController < ApplicationController
   def allowy_context
-    {realy: 'anything', can_be: 'here', even: params}
+    CmsContext.new {realy: 'anything', can_be: 'here', even: params}
   end
 end
 ```
@@ -101,7 +106,7 @@ end
 ## More comprehensive example
 
 You probably have multiple classes that you want to protect.
-I recommend creating your own base class to provide common context and maybe some utility methods:
+I recommend creating your own base class or module to provide common context and maybe some utility methods:
 
 ```ruby
 class DefaultAccess
@@ -179,7 +184,11 @@ To test the access control classes you can just instantiate those passing contex
 Most of the time you will stub out the context, so the test isolation is a piece of cake.
 
 You need to `require 'allowy/rspec'`.
-It will give you RSpec matcher `be_able_to` and `ignore_authorization!` macro for controller specs.
+It will give you:
+
+- `be_able_to` RSpec matcher;
+-  `ignore_authorization!` macro for controller specs;
+-  `should_authorize_for!` macro for controller specs (can **only** be used with `ignore_authorization!`).
 
 
 ```ruby
@@ -197,17 +206,32 @@ describe PageAccess do
       subject.view?(page).should be_false
     end
 
-    context "when published" do
-      before { page.publish! }
-      it { should be_able_to :view, page }
-    end
-  end
+    context "I prefer RSpec contexts" do
+      subject { PageAccess.new(stub(:current_user: user)).view?(page) }
 
-  # and so on
+      context "when logged in" do
+        let(:user) { stub 'User' }
+        context "and page is wiki" do
+          before { page.stub(wiki?: true) }
+          it { should be_true }
+        end
+        context "and page is not wiki" do
+          before { page.stub(wiki?: false) }
+          it { should be_false }
+        end
+      end
+
+      context "when anonim" do
+        let(:user) { nil }
+        it { should be_false }
+      end
+    end
+
+  end
 end
 
 
-# Example of a controller specs
+# Example of a controller spec
 describe PagesController do
   # This will always grant access, so you don't have to create too many objects
   # But make sure you test PageAccess separately as in the example above
@@ -224,25 +248,6 @@ describe PagesController do
 end
 
 ```
-
-But if you don't want to stub the context because you access its `can?`, `cannot?` or `authorize!` methods
-(allwing permission delegation) then you can simply mix the `Allowy::Context` in:
-
-```ruby
-class ControllerLikeContext
-  include Alllowy::Context
-  attr_accessor :current_user
-
-  def initialize(user)
-    @current_user = user
-  end
-end
-
-# Then you can simply instantiate it to check the permissions:
-ControllerLikeContext.new(that_user).should be_able_to :edit, Blog
-ControllerLikeContext.new(this_user).should_not be_able_to :edit, Blog
-```
-
 
 # Development
 

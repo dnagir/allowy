@@ -1,8 +1,8 @@
 module Allowy
 
-  # This module provides the default and common context to for checking the permissions.
-  # It is mixed into the Controller in Rails by default and provides an wasy way to reuse it
-  # in other parts of the application (in RSpec or Cucumber) without needint a controller.
+  # This module provides the default and common context for checking the permissions.
+  # It is mixed into controllers in Rails by default and provides an easy way to reuse it
+  # in other parts of the application (in RSpec or Cucumber) without needing a controller.
   # For example, you can use this code in your Cucumber features:
   #
   #   @example
@@ -14,7 +14,7 @@ module Allowy
   #       @current_user = user
   #     end
   #
-  # And the you can easily check the permissions simply using something like:
+  # And the you can easily check the permissions like so:
   #
   #   @example
   #   CustomContext.new(that_user).should be_able_to :create, Blog
