@@ -245,6 +245,11 @@ describe PagesController do
     should_authorize_for(:create, page)
     post(:create)
   end
+
+  it "checks the authorisation with plain RSpec if you don't like the macro" do
+    allowy.should_receive(:authorize!).with(:create, page)
+    post(:create)
+  end
 end
 
 ```
