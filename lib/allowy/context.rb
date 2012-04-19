@@ -14,7 +14,7 @@ module Allowy
   #       @current_user = user
   #     end
   #
-  # And the you can easily check the permissions like so:
+  # And then you can easily check the permissions like so:
   #
   #   @example
   #   CustomContext.new(that_user).should be_able_to :create, Blog
