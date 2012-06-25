@@ -34,7 +34,7 @@ module Allowy
       current_allowy.access_control_for!(subject).can?(action, subject, *args)
     end
 
-    def cannot?(*args)
+    def cannot?(action, subject, *args)
       current_allowy.access_control_for!(subject).cannot?(action, subject, *args)
     end
 

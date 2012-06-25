@@ -21,6 +21,12 @@ module Allowy
       subject.can?(:edit, 123)
     end
 
+    it "should be able to check using cannot?" do
+      subject.current_allowy.should_receive(:access_control_for!).with(123).and_return access
+      access.should_receive(:cannot?).with(:edit, 123)
+      subject.cannot?(:edit, 123)
+    end
+
     it "should call authorize!" do
       access.should_receive(:authorize!).with :edit, 123
       subject.current_allowy.stub(:access_control_for! => access)
