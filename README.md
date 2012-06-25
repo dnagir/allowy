@@ -188,7 +188,7 @@ It will give you:
 
 - `be_able_to` RSpec matcher;
 -  `ignore_authorization!` macro for controller specs;
--  `should_authorize_for!` macro for controller specs (can **only** be used with `ignore_authorization!`).
+-  `should_authorize_for` method for controller specs (can **only** be used with `ignore_authorization!`).
 
 
 ```ruby
