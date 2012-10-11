@@ -1,6 +1,6 @@
 module Allowy
   # This module provides the interface for implementing the access control actions.
-  # In order to use it, mix it into a poor Ruby class and define methods ending with `?`.
+  # In order to use it, mix it into a plain Ruby class and define methods ending with `?`.
   # For example:
   #
   #   @example
@@ -10,6 +10,7 @@ module Allowy
   #     def view?(page)
   #       page and page.wiki? and context.user_signed_in?
   #     end
+  #   end
   #
   # And then you can check the permissions from a controller:
   #
@@ -20,17 +21,20 @@ module Allowy
   #   end
   #
   #
-  # You can also check the permissions outside of the controller, but you need a similar `Allowy::Context` class:
+  # You can also check the permissions outside of the controller, but you need an object that
+  # includes `Allowy::Context` class:
   #
   #   @example
   #   class CucumberContext
   #     include Allowy::Context
   #     attr_accessor :current_user
+  #
   #     def initialize(user)
   #       @current_user = user
   #     end
   #   end
   #
+  #   CucumberContext.new(that_user).can?(:create, Blog)
   #   CucumberContext.new(that_user).should be_able_to :create, Blog
   #
   module AccessControl
