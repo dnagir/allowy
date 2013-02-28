@@ -103,6 +103,33 @@ class PagesController < ApplicationController
 end
 ```
 
+
+## Customising access class
+
+The "access" class, by convention, will be determined by the class of the original object plus the "Access" suffix.
+It may be a problem if you decorate the class using `draper` gem or using similar approach where the actual class name is different.
+
+The version `0.3` of has built-in support for the `draper` gem and it should "just work".
+
+But additionally it provides a customisation option for you if you need that.
+
+So if you need to change the access class for your object you need to do the following:
+
+
+```ruby
+# This will just work provided there's a PageAccess class
+class PageDecorator < Draper::Decorator
+end
+
+class PageViewModel < SimpleDelegator
+  # This will allow using PageViewModel as it would be just Page
+  def self.source_class
+    Page
+  end
+end
+
+```
+
 ## More comprehensive example
 
 You probably have multiple classes that you want to protect.
