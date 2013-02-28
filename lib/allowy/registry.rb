@@ -14,10 +14,8 @@ module Allowy
     def access_control_for(subject)
       return unless subject
 
-      clazz = if defined?(Draper::Decorator) && subject.class <= Draper::Decorator
-          # Try subject as decorated object
-          class_for "#{subject.class.source_class.name}Access"
-        end
+      # Try subject as decorated object
+      clazz = class_for "#{subject.class.source_class.name}Access" if subject.class.respond_to?(:source_class)
 
       # Try subject as an object
       clazz = class_for "#{subject.class.name}Access" unless clazz
@@ -31,7 +29,7 @@ module Allowy
     end
 
     def class_for(name)
-      name.constantize rescue nil #TODO: Handle just the NameError
+      name.safe_constantize
     end
 
   end

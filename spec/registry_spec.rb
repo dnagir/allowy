@@ -31,17 +31,13 @@ module Allowy
         first.should === secnd
       end
 
-      it "should support objects decorated with Draper" do
-        stub_const('Draper::Decorator', Class.new)
-
-        decorator_class = Class.new(Draper::Decorator) do
+      it "should support objects that provide source_class method (such as Draper)" do
+        decorator_class = Class.new do
           def self.source_class
             Sample
           end
         end
-
         decorated_object = decorator_class.new
-        
         subject.access_control_for!(decorated_object).should be_a SampleAccess
       end
 
