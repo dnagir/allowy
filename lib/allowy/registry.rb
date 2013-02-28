@@ -13,8 +13,14 @@ module Allowy
 
     def access_control_for(subject)
       return unless subject
+
+      clazz = if defined?(Draper::Decorator) && subject.class <= Draper::Decorator
+          # Try subject as decorated object
+          class_for "#{subject.class.source_class.name}Access"
+        end
+
       # Try subject as an object
-      clazz = class_for "#{subject.class.name}Access"
+      clazz = class_for "#{subject.class.name}Access" unless clazz
 
       # Try subject as a class
       clazz = class_for "#{subject.name}Access" if !clazz && subject.is_a?(Class)
