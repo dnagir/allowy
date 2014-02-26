@@ -40,7 +40,7 @@ module Allowy
       end
 
       it "should not raise error" do
-        expect { subject.authorize! :read, 'allow' }.not_to raise_error AccessDenied
+        expect { subject.authorize! :read, 'allow' }.not_to raise_error
       end
     end
 

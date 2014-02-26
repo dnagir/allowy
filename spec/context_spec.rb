@@ -8,7 +8,7 @@ module Allowy
   describe Context do
 
     subject { SampleContext.new }
-    let(:access) { stub }
+    let(:access) { double("Access") }
 
     it "should create a registry" do
       Registry.should_receive(:new).with(subject)

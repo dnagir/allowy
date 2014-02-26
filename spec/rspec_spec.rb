@@ -4,7 +4,7 @@ require 'allowy/rspec'
 module Allowy
   describe ControllerAuthorizationMacros do
     include ControllerAuthorizationMacros
-    before { @controller = stub("FakeController") }
+    before { @controller = double("FakeController") }
 
     ignore_authorization!
 
