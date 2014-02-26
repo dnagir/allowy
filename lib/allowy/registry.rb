@@ -12,8 +12,6 @@ module Allowy
     end
 
     def access_control_for(subject)
-      return unless subject
-
       # Try subject as decorated object
       clazz = class_for "#{subject.class.source_class.name}Access" if subject.class.respond_to?(:source_class)
 

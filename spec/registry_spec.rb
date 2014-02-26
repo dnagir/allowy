@@ -25,6 +25,14 @@ module Allowy
         lambda { subject.access_control_for!(nil) }.should raise_error UndefinedAccessControl
       end
 
+      it "should return NilClassAccess when subject is nil and NilClassAccess is defined" do
+        nil_class_access = Class.new do
+          include Allowy::AccessControl
+        end
+        stub_const("NilClassAccess", nil_class_access)
+        subject.access_control_for!(nil).should be_a nil_class_access
+      end
+
       it "should return the same AC instance" do
         first = subject.access_control_for!(Sample)
         secnd = subject.access_control_for!(Sample)
