@@ -130,6 +130,38 @@ end
 
 ```
 
+# Early termination
+
+If you have a pre-condition for any permission checks you can abort more complex logic by
+calling `deny!('my reason to deny')`.
+
+For example:
+
+```ruby
+class PageAccess < DefaultAccess
+  def view?(page)
+    deny!(:no_user) unless current_user
+    page and page.published? and domain_name =~ /^www\./i
+  end
+end
+```
+
+This is very similar to:
+
+```ruby
+class PageAccess < DefaultAccess
+  def view?(page)
+    return false unless current_user
+    page and page.published? and domain_name =~ /^www\./i
+  end
+end
+```
+
+Except that additional information on the exception will be available when calling `authorize!`.
+
+This information is available from the ` Allowy::AccessDenied#payload`.
+
+
 ## More comprehensive example
 
 You probably have multiple classes that you want to protect.
@@ -190,7 +222,8 @@ class PagesController < ApplicationController
   # Add this to the ApplicationController to handle it globally
   rescue_from Allowy::AccessDenied do |exception|
     logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
-    redirect_to new_user_session_url, :alert => exception.message
+    redirect_to new_user_session_url if no_access.payload == :no_user
+    render('shared/no_permission', message: exception.message)
   end
 end
 ```
