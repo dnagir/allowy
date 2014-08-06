@@ -61,6 +61,10 @@ module Allowy
       raise AccessDenied.new("Not authorized", action, subject, payload) if not allowing
     end
 
+    def deny!(payload)
+      throw(:deny, payload)
+    end
+
     private
 
     def check_permission(action, subject, *params)
