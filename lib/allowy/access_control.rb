@@ -47,18 +47,28 @@ module Allowy
       @context = ctx
     end
 
-    def can?(action, *args)
-      m = "#{action}?"
-      raise UndefinedAction.new("The #{self.class.name} needs to have #{m} method. Please define it.") unless self.respond_to? m
-      send(m, *args)
+    def can?(action, subject, *params)
+      allowing, _ = check_permission(action, subject, *params)
+      allowing
     end
 
     def cannot?(*args)
       not can?(*args)
     end
 
-    def authorize!(*args)
-      raise AccessDenied.new("Not authorized", args.first, args[1]) unless can?(*args)
+    def authorize!(action, subject, *params)
+      allowing, payload = check_permission(action, subject, *params)
+      raise AccessDenied.new("Not authorized", action, subject, payload) if not allowing
+    end
+
+    private
+
+    def check_permission(action, subject, *params)
+      m = "#{action}?"
+      raise UndefinedAction.new("The #{self.class.name} needs to have #{m} method. Please define it.") unless self.respond_to? m
+      allowing = false
+      payload = catch(:deny) { allowing = send(m, subject, *params) }
+      [allowing, payload]
     end
   end
 

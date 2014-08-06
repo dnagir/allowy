@@ -14,6 +14,10 @@ class SampleAccess
     str == 'allow'
   end
 
+  def early_deny?(str)
+    throw(:deny, "early terminate: #{str}")
+  end
+
   def context_is_123?(*whatever)
     context === 123
   end

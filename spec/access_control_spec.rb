@@ -15,12 +15,12 @@ module Allowy
       end
     end
 
-    it "should allow" do
-      subject.should be_able_to :read, 'allow'
-    end
+    it { should be_able_to :read, 'allow' }
+    it { should_not be_able_to :read, 'deny' }
 
-    it "should deny" do
-      subject.should_not be_able_to :read, 'deny'
+    it "should deny with early termination" do
+      access.should_not be_able_to :early_deny, 'foo'
+      access.can?(:early_deny, 'xx').should == false
     end
 
     it "should raise if no permission defined" do
@@ -42,6 +42,16 @@ module Allowy
       it "should not raise error" do
         expect { subject.authorize! :read, 'allow' }.not_to raise_error
       end
+
+      it "should raise early termination error with payload" do
+        expect { subject.authorize! :early_deny, 'subject' }.to raise_error AccessDenied do |err|
+          err.message.should_not be_blank
+          err.action.should == :early_deny
+          err.subject.should == 'subject'
+          err.payload.should == 'early terminate: subject'
+        end
+      end
+
     end
 
   end

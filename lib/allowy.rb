@@ -13,12 +13,13 @@ module Allowy
   class UndefinedAction < StandardError; end
 
   class AccessDenied < StandardError
-    attr_reader :action, :subject
+    attr_reader :action, :subject, :payload
 
-    def initialize(message, action, subject)
+    def initialize(message, action, subject, payload=nil)
       @message = message
       @action = action
       @subject = subject
+      @payload = payload
     end
   end
 end
