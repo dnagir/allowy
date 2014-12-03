@@ -330,9 +330,4 @@ bundle install
 bundle exec rspec spec/
 ```
 
-
 Pull requests are very welcome, but please include the specs.
-
-# License
-
-[MIT] (http://www.opensource.org/licenses/mit-license.php)

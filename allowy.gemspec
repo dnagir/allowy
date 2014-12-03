@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/dnagir/allowy"
   s.summary     = %q{Authorization with simplicity and explicitness in mind}
   s.description = %q{Allowy provides CanCan-like way of checking permission but doesn't enforce a tight DSL giving you more control}
+  s.licenses    = ["MIT"]
 
   s.rubyforge_project = "allowy"
 
