@@ -13,22 +13,29 @@ module Allowy
 
     def access_control_for(subject)
       # Try subject as decorated object
-      clazz = class_for "#{subject.class.source_class.name}Access" if subject.class.respond_to?(:source_class)
+      klass = class_for subject.class.source_class.name if subject.class.respond_to?(:source_class)
 
       # Try subject as an object
-      clazz = class_for "#{subject.class.name}Access" unless clazz
+      klass = class_for subject.class.name unless klass
 
       # Try subject as a class
-      clazz = class_for "#{subject.name}Access" if !clazz && subject.is_a?(Class)
+      klass = class_for subject.name if !klass && subject.is_a?(Class)
 
-      return unless clazz # No luck this time
+      return unless klass # No luck this time
       # create a new instance or return existing
-      @registry[clazz] ||= clazz.new(@context)
+      @registry[klass] ||= klass.new(@context)
     end
 
     def class_for(name)
-      name.safe_constantize
+      (name + access_suffix).safe_constantize
     end
 
+    def self.access_suffix
+      "Access"
+    end
+
+    def access_suffix
+      self.class.access_suffix
+    end
   end
 end
