@@ -9,7 +9,8 @@ module Allowy
     describe "#context as an arbitrary object" do
       subject     { access.context }
       its(:to_s)  { should == '123' }
-      its(:zero?) { should be_false }
+      its(:zero?) { should == false }
+
       it "should be able to access the context" do
         access.should be_able_to :context_is_123
       end

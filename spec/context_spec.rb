@@ -11,25 +11,25 @@ module Allowy
     let(:access) { double("Access") }
 
     it "should create a registry" do
-      Registry.should_receive(:new).with(subject)
+      expect(Registry).to receive(:new).with(subject)
       subject.current_allowy
     end
 
     it "should be able to check using can?" do
-      subject.current_allowy.should_receive(:access_control_for!).with(123).and_return access
-      access.should_receive(:can?).with(:edit, 123)
+      expect(subject.current_allowy).to receive(:access_control_for!).with(123).and_return access
+      expect(access).to receive(:can?).with(:edit, 123)
       subject.can?(:edit, 123)
     end
 
     it "should be able to check using cannot?" do
-      subject.current_allowy.should_receive(:access_control_for!).with(123).and_return access
-      access.should_receive(:cannot?).with(:edit, 123)
+      expect(subject.current_allowy).to receive(:access_control_for!).with(123).and_return access
+      expect(access).to receive(:cannot?).with(:edit, 123)
       subject.cannot?(:edit, 123)
     end
 
     it "should call authorize!" do
-      access.should_receive(:authorize!).with :edit, 123
-      subject.current_allowy.stub(:access_control_for! => access)
+      expect(access).to receive(:authorize!).with :edit, 123
+      allow(subject.current_allowy).to receive(:access_control_for!).and_return access
       subject.authorize! :edit, 123
     end
   end

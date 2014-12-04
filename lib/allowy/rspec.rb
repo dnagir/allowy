@@ -12,19 +12,19 @@ module Allowy
 
 
     def should_authorize_for(*args)
-      allowy.should_receive(:authorize!).with(*args)
+      expect(allowy).to receive(:authorize!).with(*args)
     end
 
     def should_not_authorize_for(*args)
-      allowy.should_not_receive(:authorize!).with(*args)
+      expect(allowy).not_to receive(:authorize!).with(*args)
     end
 
     module ClassMethods
       def ignore_authorization!
         before(:each) do
           registry = double 'Registry'
-          registry.stub(:can? => true, :cannot? => false, :authorize! => nil, access_control_for!: registry)
-          @controller.stub(:current_allowy).and_return registry
+          allow(registry).to receive_messages(:can? => true, :cannot? => false, :authorize! => nil, access_control_for!: registry)
+          allow(@controller).to receive(:current_allowy).and_return registry
         end
       end
     end

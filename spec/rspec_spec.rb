@@ -17,6 +17,7 @@ module Allowy
         should_authorize_for(:create, 123)
         allowy.authorize!(:create, 123)
       end
+
       it "works when not authorised" do
         should_not_authorize_for(:create, 123)
         allowy.authorize!(:edit, 123)

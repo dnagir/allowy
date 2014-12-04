@@ -25,6 +25,8 @@ module Allowy
       def negative_failure_message
         say "expected NOT to be able to"
       end
+
+      alias_method :failure_message_when_negated, :negative_failure_message
     end
 
     def be_able_to(*args)
