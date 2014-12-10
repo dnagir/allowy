@@ -21,6 +21,10 @@ class SampleAccess
     deny! "early terminate: #{str}"
   end
 
+  def extra_params?(foo, *opts)
+    foo == opts.last[:bar]
+  end
+
   def context_is_123?(*whatever)
     context === 123
   end

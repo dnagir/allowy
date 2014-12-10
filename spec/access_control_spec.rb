@@ -19,6 +19,10 @@ module Allowy
     it { should be_able_to :read, 'allow' }
     it { should_not be_able_to :read, 'deny' }
 
+    it "should pass extra parameters" do
+      access.should be_able_to :extra_params, 'same', bar: 'same'
+    end
+
     it "should deny with early termination" do
       access.should_not be_able_to :early_deny, 'foo'
       access.can?(:early_deny, 'xx').should == false
