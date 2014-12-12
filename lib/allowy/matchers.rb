@@ -2,8 +2,8 @@ module Allowy
   module Matchers
 
     class AbleToMatcher
-      def initialize(action, subject=nil)
-        @action, @subject = action, subject
+      def initialize(action, subject=nil, *params)
+        @action, @subject, @params = action, subject, params
       end
 
       def say msg
@@ -11,7 +11,7 @@ module Allowy
       end
 
       def matches?(access_control)
-        access_control.can?(@action, @subject)
+        access_control.can?(@action, @subject, *@params)
       end
 
       def description
