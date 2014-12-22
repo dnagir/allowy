@@ -3,3 +3,5 @@
 Gemfile.lock
 pkg/*
 *.swp
+/.ruby-gemset
+/.ruby-version
