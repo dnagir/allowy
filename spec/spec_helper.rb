@@ -30,6 +30,10 @@ class SampleAccess
   end
 end
 
+class SamplePermission
+  include Allowy::AccessControl
+end
+
 class Sample
   attr_accessor :name
 end

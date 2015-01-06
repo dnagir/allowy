@@ -11,6 +11,15 @@ module Allowy
         subject.access_control_for!(Sample.new).should be_a SampleAccess
       end
 
+      it "should find AC by appending custom suffix to the subject" do
+        registry = Registry.new(context, access_suffix: 'Permission')
+        registry.access_control_for!(Sample.new).should be_a SamplePermission
+      end
+
+      it "raises on invalid option" do
+        expect { Registry.new(context, foo: 'incorrect option') }.to raise_error /unknown key/i
+      end
+
       it "should find AC when the subject is a class" do
         subject.access_control_for!(Sample).should be_a SampleAccess
       end
