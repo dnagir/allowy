@@ -109,7 +109,7 @@ end
 The "access" class, by convention, will be determined by the class of the original object plus the "Access" suffix.
 It may be a problem if you decorate the class using `draper` gem or using similar approach where the actual class name is different.
 
-The version `0.3` of has built-in support for the `draper` gem and it should "just work".
+The version `0.3` has built-in support for the `draper` gem and it should "just work".
 
 But additionally it provides a customisation option for you if you need that.
 
@@ -129,6 +129,19 @@ class PageViewModel < SimpleDelegator
 end
 
 ```
+
+If you simply don't like the `Access` suffix, you can override it by passing the `access_suffix` option to the `Registry` class.
+For example, in a typical Rails app you will need to override the `current_allowy` method on the `ApplicationController` like so:
+
+```ruby
+class ApplicationController < ActionController::Base
+  def current_allowy
+    @current_allowy ||= ::Allowy::Registry.new(allowy_context, access_suffix: 'Permission')
+  end
+end
+```
+
+The above will allow using `UserPermission` class name instead of `UserAccess`.
 
 # Early termination
 
