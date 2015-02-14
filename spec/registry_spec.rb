@@ -58,6 +58,26 @@ module Allowy
         subject.access_control_for!(decorated_object).should be_a SampleAccess
       end
 
+      it "should support objects that provide source_class method with namespace or alternative location" do
+        decorator_class = Class.new do
+          def self.source_class
+            Authorisations::AnotherSample
+          end
+        end
+        decorated_object = decorator_class.new
+        subject.access_control_for!(decorated_object).should be_a Authorisations::AnotherSampleAccess
+      end
+
+      it "should support specifying an alternative named access class directly without related base class" do
+        decorator_class = Class.new do
+          def self.source_class
+            Authorisations::AlternativeSampleAccess
+          end
+        end
+        decorated_object = decorator_class.new
+        subject.access_control_for!(decorated_object).should be_a Authorisations::AlternativeSampleAccess
+      end
+
     end
   end
 end

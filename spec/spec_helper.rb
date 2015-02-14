@@ -37,3 +37,14 @@ end
 class Sample
   attr_accessor :name
 end
+
+module Authorisations
+  class AnotherSample
+  end
+  class AnotherSampleAccess
+    include Allowy::AccessControl
+  end
+  class AlternativeSampleAccess
+    include Allowy::AccessControl
+  end
+end
