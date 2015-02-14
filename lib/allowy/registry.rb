@@ -14,14 +14,18 @@ module Allowy
     end
 
     def access_control_for(subject)
-      # Try subject as decorated object
-      clazz = class_for subject.class.source_class.name if subject.class.respond_to?(:source_class)
-
-      # Try subject as an object
-      clazz = class_for subject.class.name unless clazz
-
-      # Try subject as a class
-      clazz = class_for subject.name if !clazz && subject.is_a?(Class)
+      clazz = nil
+      # test for overridden source class eg decorated object/class
+      if subject.class.respond_to?(:source_class) || subject.respond_to?(:source_class)
+        # Try subject as decorated object
+        clazz = class_for subject.class.source_class.name if subject.class.respond_to?(:source_class)
+        clazz = class_for subject.source_class.name if subject.respond_to?(:source_class)
+      else
+        # Try subject as an object
+        clazz = class_for subject.class.name unless clazz
+        # Try subject as a class
+        clazz = class_for subject.name if !clazz && subject.is_a?(Class)
+      end
 
       return unless clazz # No luck this time
       # create a new instance or return existing
@@ -31,7 +35,8 @@ module Allowy
     private
 
     def class_for(name)
-      "#{name}#{access_suffix}".safe_constantize
+      remove_suffix_if_exists = Regexp.new("#{access_suffix}$")
+      "#{name.gsub(remove_suffix_if_exists,'')}#{access_suffix}".safe_constantize
     end
 
     def access_suffix
